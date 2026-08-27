@@ -6,6 +6,20 @@ An open-source, modular system for creating **persistent anime-style AI characte
 The character is a persistent state owned by this application.  
 You can switch between local LLMs (llama.cpp, Ollama) and hosted APIs (OpenAI, Anthropic, Gemini, etc.) without losing identity, memories, relationships, goals, or personality.
 
+## UI preview
+
+The Discord-inspired workspace includes a Live2D preview, smart-emotion
+controls, and configurable idle animation presets:
+
+![Vtubecord Avatar and Live2D settings](docs/media/vtubecord-avatar-settings.jpg)
+
+The short animated walkthrough below shows the same settings surface with
+different idle presets selected:
+
+![Vtubecord Live2D settings walkthrough](docs/media/live2d-ui.gif)
+
+[Download the MP4 walkthrough](docs/media/live2d-ui.mp4)
+
 ---
 
 ## Quick Philosophy

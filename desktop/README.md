@@ -5,6 +5,14 @@ Tauri/WebView2 window. It does not open Chrome or Edge as the application UI,
 and the bundled Rust launcher starts the FastAPI server without a console
 window.
 
+## Visual preview
+
+![Vtubecord Avatar and Live2D settings](../docs/media/vtubecord-avatar-settings.jpg)
+
+![Vtubecord Live2D settings walkthrough](../docs/media/live2d-ui.gif)
+
+[Download the MP4 walkthrough](../docs/media/live2d-ui.mp4)
+
 ## Development
 
 From this directory:

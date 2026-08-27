@@ -11,6 +11,13 @@ $resourceDir = Join-Path $desktopRoot "src-tauri\resources"
 New-Item -ItemType Directory -Path $resourceDir -Force | Out-Null
 
 $backendPython = Join-Path $projectRoot "backend\.venv\Scripts\python.exe"
+if (-not (Test-Path -LiteralPath $backendPython)) {
+    $systemPython = Get-Command python -ErrorAction SilentlyContinue
+    if ($systemPython) {
+        $backendPython = $systemPython.Source
+        Write-Host "backend/.venv not found; using the configured Python interpreter at $backendPython."
+    }
+}
 
 if (-not $ServerExecutable) {
     $ServerExecutable = Join-Path $projectRoot "backend\dist\VtubecordServer.exe"
@@ -21,7 +28,7 @@ if (-not $ServerExecutable) {
 
 if (-not (Test-Path -LiteralPath $ServerExecutable)) {
     if (-not (Test-Path -LiteralPath $backendPython)) {
-        throw "VtubecordServer.exe is missing and backend/.venv is not available. Run SETUP.bat first or pass -ServerExecutable."
+        throw "VtubecordServer.exe is missing and no Python interpreter is available. Run SETUP.bat first or pass -ServerExecutable."
     }
     & $backendPython -c "import PyInstaller" 2>$null
     if ($LASTEXITCODE -ne 0) {
@@ -42,7 +49,7 @@ if (-not (Test-Path -LiteralPath $ServerExecutable)) {
 
 $updaterExecutable = Join-Path $resourceDir "VtubecordUpdater.exe"
 if (-not (Test-Path -LiteralPath $backendPython)) {
-    throw "VtubecordUpdater.exe cannot be rebuilt because backend/.venv is not available. Run SETUP.bat first."
+    throw "VtubecordUpdater.exe cannot be rebuilt because no Python interpreter is available. Run SETUP.bat first."
 }
 & $backendPython -c "import PyInstaller" 2>$null
 if ($LASTEXITCODE -ne 0) {
