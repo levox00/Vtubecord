@@ -4,7 +4,7 @@
 **Project:** AI VTuber  
 **Scope:** Current code, assets, configuration schemas, installed Equicord bridge, live backend state, and verification results.
 
-> This is a current-state inventory, not a Git changelog. The project folder does not currently contain usable Git metadata, so the report was reconstructed from the files and services that determine the running application. Secrets, tokens, and Discord IDs are intentionally omitted.
+> This is a current-state inventory, not a Git changelog. It is versioned with the project so implementation details can be compared against tagged releases. Secrets, tokens, and Discord IDs are intentionally omitted.
 
 ## Executive summary
 
@@ -523,15 +523,14 @@ A full collection from the backend directory also reaches the repository-level p
 
 These should be added through the existing integration and tool registry boundaries instead of giving the LLM direct access to external APIs or raw UI/avatar parameters.
 
-## Documentation drift
+## Documentation notes
 
-Some older files no longer describe the actual implementation accurately:
+- `README.md` contains the user-facing release status and current goals.
+- `STRUCTURE.md` still focuses on the earlier Shizuku layout and does not include
+  every current tool, model, Discord voice, or dataset-editor path.
 
-- `README.md` still presents voice and parts of Live2D as future work.
-- `GOALS.md` contains unchecked Live2D items that are now present in code. Its own rules say completion status must be changed by the user, so this report does not edit those checkboxes.
-- `STRUCTURE.md` focuses on the earlier Shizuku layout and does not include the current tool system, multi-model Live2D library, Discord voice bridge, or dataset editor.
-
-This file should be treated as the current technical handoff until those older documents are deliberately reconciled.
+This file remains the detailed technical handoff; the README is the shorter
+release-oriented overview.
 
 ## Key file map
 

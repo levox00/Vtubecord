@@ -2,6 +2,8 @@
 
 An open-source, modular system for creating **persistent anime-style AI characters** with long-term memory, personality evolution, voice interaction, Live2D avatar, tools, and optional game agents.
 
+**Current release:** `0.1.0` · **Status:** active alpha development · **Platform:** Windows desktop/portable and browser-based local development
+
 **Core Principle:** The LLM is **not** the character.  
 The character is a persistent state owned by this application.  
 You can switch between local LLMs (llama.cpp, Ollama) and hosted APIs (OpenAI, Anthropic, Gemini, etc.) without losing identity, memories, relationships, goals, or personality.
@@ -50,10 +52,10 @@ different idle presets selected:
 - Zustand
 - WebSocket for real-time updates
 
-### Avatar & Voice (later phases)
-- Live2D Cubism Web SDK (Shizuku sample for development)
-- Faster-Whisper / Whisper-compatible ASR
-- Piper TTS (local default)
+### Avatar & Voice
+- Live2D Cubism Web SDK with six normalized models, expressions, gestures, idle animation, and lip sync
+- NVIDIA NeMo/Nemotron streaming ASR on CUDA, with Faster-Whisper fallback
+- Zonos, Index-TTS, Edge TTS, and OpenRouter/Fish Audio-compatible TTS paths
 
 ### Local LLM
 - llama.cpp OpenAI-compatible server
@@ -64,16 +66,38 @@ different idle presets selected:
 
 ## Project Status
 
-| Phase | Status | Description |
-|-------|--------|-------------|
-| Phase 1 | In Progress | Backend, Frontend, Chat, LLM abstraction, Character Profile |
-| Phase 2 | Planned | Voice pipeline + Live2D |
-| Phase 3 | Planned | Full memory system |
-| Phase 4 | Planned | Autonomy, goals, proactive behavior |
-| Phase 5 | Planned | Computer control & vision |
-| Phase 6 | Planned | Game adapter (one game) |
-| Phase 7 | Planned | Game learning / RL baseline |
-| Phase 8 | Planned | Long-term personality evolution |
+The project is beyond the original chat-only prototype. The current `0.1.0`
+release is usable for local development and packaged Windows testing; model
+weights and third-party assets remain user-managed.
+
+| Area | Status | Current implementation |
+|------|--------|-----------------------|
+| Core chat and LLM abstraction | Implemented | OpenAI-compatible local/hosted providers, model switching, per-channel history, and explicit preset management |
+| Tool calling | Implemented | Validated native/prompt fallbacks for Spotify, Discord, avatar actions, and integration tools |
+| Character and memory | Implemented | Markdown persona profiles plus SQLite conversations, emotions, memories, goals, and skills |
+| Voice pipeline | Implemented | Nemotron/NeMo streaming STT on CUDA, Faster-Whisper fallback, TTS engine fallback, voice references, and model unloading |
+| Live2D avatar | Implemented | Six normalized models, smart expressions, semantic gestures, lip sync, speaking states, and varied idle animation |
+| Discord integration | Implemented | Equicord/client and bot transports, channel routing, tool calls, voice join, two-way voice audio, and VB-CABLE output |
+| Spotify integration | Implemented | OAuth, track resolution, playback/queue/volume/favorites/status tools, and parser compatibility fallback |
+| Dataset editing | Beta | Standalone Dataswipe workspace with card swiping, structured editing, name replacement, history, and export |
+| Desktop application | Implemented | `Vtubecord.exe`, terminal-free bundled server, portable ZIP, NSIS/MSI installer, and GitHub updater |
+| Memory retrieval and autonomy | In progress | Autonomous live-voice brain is available; richer vector retrieval and multimodal attention remain future work |
+
+## Current goals
+
+- Harden the Discord/Equicord bridge contract, especially reliable mute/deafen
+  commands and strict error reporting for unsupported bridge actions.
+- Improve model lifecycle and performance: smaller frontend chunks, predictable
+  sidecar startup, and continued GPU/VRAM-aware model unloading.
+- Expand the integration tool registry with OBS controls, Twitch ingestion and
+  moderation, screen/vision tools, and structured game adapters.
+- Strengthen memory quality with embeddings/vector retrieval, conflict history,
+  and better cross-channel summaries while preserving per-channel privacy.
+- Keep the Windows installer, portable build, updater, documentation, and model
+  license/attribution flow reproducible for each tagged release.
+
+See [CURRENT_IMPLEMENTATION_STATUS.md](docs/CURRENT_IMPLEMENTATION_STATUS.md)
+for the detailed implementation inventory and verification notes.
 
 ---
 
@@ -90,6 +114,11 @@ For an installed desktop application, use the Vtubecord target in
 [`desktop/README.md`](desktop/README.md). It builds `Vtubecord.exe` and a
 Windows installer that embeds the UI and starts the backend without terminal
 windows.
+
+The latest tagged Windows artifacts are published on the
+[Vtubecord GitHub releases page](https://github.com/levox00/Vtubecord/releases).
+The portable build keeps writable runtime data under
+`%LOCALAPPDATA%\\Vtubecord`; it does not include model weights.
 
 ### Linux / macOS
 ```bash
@@ -111,6 +140,7 @@ See [INSTALLATION.md](docs/INSTALLATION.md) for full details, paths, and trouble
 - [HOSTED_MODELS.md](docs/HOSTED_MODELS.md)
 - [MEMORY.md](docs/MEMORY.md)
 - [PERSONALITY.md](docs/PERSONALITY.md)
+- [CURRENT_IMPLEMENTATION_STATUS.md](docs/CURRENT_IMPLEMENTATION_STATUS.md)
 - [THIRD_PARTY_LICENSES.md](docs/THIRD_PARTY_LICENSES.md)
 
 ---
