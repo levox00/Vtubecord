@@ -27,6 +27,25 @@ src-tauri/target/release/bundle/nsis/Vtubecord_0.1.0_x64-setup.exe
 src-tauri/target/release/bundle/msi/Vtubecord_0.1.0_x64_en-US.msi
 ```
 
+The same release build packages `VtubecordUpdater.exe` in
+`updater/dist/` and embeds it in the installer resources. The updater checks
+the latest GitHub release, downloads the matching Windows installer, verifies
+its checksum when GitHub provides one, and starts the installer without a
+terminal window. Set `VTUBECORD_GITHUB_REPOSITORY=owner/repository` when
+building (the GitHub Actions workflow does this automatically), or put the
+repository in `src-tauri/resources/update-config.json` for a local build.
+When a checkout has an `origin` GitHub remote, the release script derives the
+repository automatically.
+
+For a manual check from a packaged build:
+
+```powershell
+.\updater\dist\VtubecordUpdater.exe --check-only
+```
+
+See [`updater/README.md`](updater/README.md) for configuration and command
+line options.
+
 The first build downloads the Rust crates, Tauri bundler tools, and the
 WebView2 bootstrapper. The generated installer is x64 and keeps model weights
 out of the application package; users download those through Vtubecord.

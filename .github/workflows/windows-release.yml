@@ -1,0 +1,58 @@
+name: Vtubecord Windows release
+
+on:
+  push:
+    tags:
+      - "v*"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  windows:
+    runs-on: windows-latest
+    steps:
+      - name: Check out source
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Set up Rust
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Install backend and packaging dependencies
+        shell: powershell
+        run: |
+          python -m pip install -r backend/requirements.txt
+          python -m pip install "pyinstaller>=6.10.0"
+
+      - name: Install frontend and desktop dependencies
+        shell: powershell
+        run: |
+          npm --prefix frontend ci
+          npm --prefix desktop ci
+
+      - name: Build installer and updater
+        shell: powershell
+        env:
+          VTUBECORD_GITHUB_REPOSITORY: ${{ github.repository }}
+        run: npm --prefix desktop run build:release
+
+      - name: Publish GitHub release assets
+        if: startsWith(github.ref, 'refs/tags/')
+        uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            desktop/src-tauri/target/release/bundle/nsis/Vtubecord_*_x64-setup.exe
+            desktop/src-tauri/target/release/bundle/msi/Vtubecord_*_x64_en-US.msi
+            desktop/src-tauri/resources/VtubecordUpdater.exe
+          generate_release_notes: true

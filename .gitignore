@@ -26,6 +26,8 @@ frontend/tsconfig.tsbuildinfo
 desktop/node_modules/
 desktop/src-tauri/target/
 desktop/src-tauri/resources/VtubecordServer.exe
+desktop/src-tauri/resources/VtubecordUpdater.exe
+desktop/src-tauri/resources/update-config.json
 desktop/src-tauri/resources/*.dll
 desktop/src-tauri/gen/
 desktop/src-tauri/icons/android/
