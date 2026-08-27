@@ -55,4 +55,5 @@ jobs:
             desktop/src-tauri/target/release/bundle/nsis/Vtubecord_*_x64-setup.exe
             desktop/src-tauri/target/release/bundle/msi/Vtubecord_*_x64_en-US.msi
             desktop/src-tauri/resources/VtubecordUpdater.exe
+            desktop/src-tauri/resources/update-config.json
           generate_release_notes: true

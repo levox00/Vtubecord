@@ -41,25 +41,23 @@ if (-not (Test-Path -LiteralPath $ServerExecutable)) {
 }
 
 $updaterExecutable = Join-Path $resourceDir "VtubecordUpdater.exe"
-if (-not (Test-Path -LiteralPath $updaterExecutable)) {
-    if (-not (Test-Path -LiteralPath $backendPython)) {
-        throw "VtubecordUpdater.exe is missing and backend/.venv is not available. Run SETUP.bat first."
-    }
-    & $backendPython -c "import PyInstaller" 2>$null
-    if ($LASTEXITCODE -ne 0) {
-        Write-Host "Installing PyInstaller into the packaging environment..."
-        & $backendPython -m pip install "pyinstaller>=6.10.0"
-        if ($LASTEXITCODE -ne 0) { throw "PyInstaller could not be installed." }
-    }
-    Write-Host "Packaging Vtubecord updater..."
-    $updaterDist = Join-Path $projectRoot "desktop\updater\dist"
-    $updaterBuild = Join-Path $projectRoot "desktop\updater\build"
-    & $backendPython -m PyInstaller --noconfirm --clean --onefile --noconsole `
-        --name VtubecordUpdater --distpath $updaterDist --workpath $updaterBuild `
-        --specpath $updaterBuild (Join-Path $projectRoot "desktop\updater\VtubecordUpdater.py")
-    if ($LASTEXITCODE -ne 0) { throw "Vtubecord updater packaging failed with exit code $LASTEXITCODE." }
-    $updaterExecutable = Join-Path $updaterDist "VtubecordUpdater.exe"
+if (-not (Test-Path -LiteralPath $backendPython)) {
+    throw "VtubecordUpdater.exe cannot be rebuilt because backend/.venv is not available. Run SETUP.bat first."
 }
+& $backendPython -c "import PyInstaller" 2>$null
+if ($LASTEXITCODE -ne 0) {
+    Write-Host "Installing PyInstaller into the packaging environment..."
+    & $backendPython -m pip install "pyinstaller>=6.10.0"
+    if ($LASTEXITCODE -ne 0) { throw "PyInstaller could not be installed." }
+}
+Write-Host "Packaging Vtubecord updater..."
+$updaterDist = Join-Path $projectRoot "desktop\updater\dist"
+$updaterBuild = Join-Path $projectRoot "desktop\updater\build"
+& $backendPython -m PyInstaller --noconfirm --clean --onefile --noconsole `
+    --name VtubecordUpdater --distpath $updaterDist --workpath $updaterBuild `
+    --specpath $updaterBuild (Join-Path $projectRoot "desktop\updater\VtubecordUpdater.py")
+if ($LASTEXITCODE -ne 0) { throw "Vtubecord updater packaging failed with exit code $LASTEXITCODE." }
+$updaterExecutable = Join-Path $updaterDist "VtubecordUpdater.exe"
 Copy-Item -LiteralPath $updaterExecutable -Destination (Join-Path $resourceDir "VtubecordUpdater.exe") -Force
 
 $appVersion = "0.1.0"
@@ -93,6 +91,7 @@ $updateConfig = @{
     current_version = $appVersion
 } | ConvertTo-Json
 $updateConfig | Set-Content -LiteralPath (Join-Path $resourceDir "update-config.json") -Encoding UTF8
+$updateConfig | Set-Content -LiteralPath (Join-Path $updaterDist "update-config.json") -Encoding UTF8
 
 if (Test-Path -LiteralPath $ServerExecutable) {
     Copy-Item -LiteralPath $ServerExecutable -Destination (Join-Path $resourceDir "VtubecordServer.exe") -Force
