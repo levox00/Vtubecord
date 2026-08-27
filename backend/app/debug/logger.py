@@ -9,8 +9,10 @@ from datetime import datetime
 from pathlib import Path
 from typing import Any
 
+from app.core.paths import data_root
 
-_LOG_DIR = Path(__file__).resolve().parent.parent.parent / "logs"
+
+_LOG_DIR = data_root() / "logs"
 _current_session_file: Path | None = None
 _initialized = False
 

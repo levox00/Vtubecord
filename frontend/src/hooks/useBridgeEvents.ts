@@ -1,5 +1,6 @@
 import { useEffect, useRef } from "react";
 import { useAppStore } from "../stores/appStore";
+import { backendWebSocketUrl } from "../lib/runtime";
 
 /**
  * Connects to the backend bridge-events WebSocket and dispatches
@@ -66,18 +67,15 @@ export function useBridgeEvents() {
         return;
       }
 
-      const protocol = window.location.protocol === "https:" ? "wss:" : "ws:";
       const configuredOrigin = import.meta.env.VITE_BACKEND_WS_URL?.replace(/\/$/, "");
       // In Vite development, connect directly to FastAPI instead of routing a
       // long-lived socket through Vite's HTTP proxy. This avoids noisy
       // ECONNABORTED proxy messages when the backend is restarted and lets the
       // existing reconnect loop recover cleanly. Production keeps same-origin
       // routing so hosted deployments do not need a fixed port.
-      const backendHost = window.location.hostname === "localhost" ? "127.0.0.1" : window.location.hostname;
-      const backendOrigin = configuredOrigin || (
-        import.meta.env.DEV ? `${protocol}//${backendHost}:8000` : `${protocol}//${window.location.host}`
-      );
-      const url = `${backendOrigin}/api/ws/bridge-events`;
+      const url = configuredOrigin
+        ? `${configuredOrigin}/api/ws/bridge-events`
+        : backendWebSocketUrl("/api/ws/bridge-events");
 
       try {
         const ws = new WebSocket(url);

@@ -21,14 +21,16 @@ from typing import Any
 
 import httpx
 
+from app.core.paths import data_root, resource_root
+
 logger = logging.getLogger(__name__)
 
 # ``stt_runtime.py`` lives directly under ``backend/app``.  The other
 # integrations are nested one level deeper, so their ``parents[3]`` root
 # calculation does not apply here.  Keeping this canonical prevents model
 # downloads from ending up beside the project instead of inside it.
-PROJECT_ROOT = Path(__file__).resolve().parents[2]
-LEGACY_PROJECT_ROOT = Path(__file__).resolve().parents[3]
+PROJECT_ROOT = data_root()
+LEGACY_PROJECT_ROOT = resource_root()
 MODEL_DIR = PROJECT_ROOT / "assets" / "whisper" / "nemotron"
 LICENSE_FILE = PROJECT_ROOT / "data" / "stt-license-acceptance.json"
 SIDECAR_PORT = 8092

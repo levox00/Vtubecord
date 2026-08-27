@@ -7,13 +7,15 @@ import yaml
 from dotenv import load_dotenv
 from pydantic import BaseModel, Field
 from pydantic_settings import BaseSettings
+from app.core.paths import data_root, resource_root
 
 # Load the project-local backend .env explicitly.  The Windows launcher
 # currently starts uvicorn from ``backend/``, but resolving this path here
 # also keeps secrets available when the server is started from the project
 # root (or by an IDE/service).  ``override=False`` is the dotenv default, so
 # an already-exported environment variable still wins over the file.
-_PROJECT_ROOT = Path(__file__).resolve().parents[3]
+_PROJECT_ROOT = resource_root()
+load_dotenv(data_root() / ".env")
 load_dotenv(_PROJECT_ROOT / "backend" / ".env")
 load_dotenv()
 
@@ -169,7 +171,12 @@ class ServerConfig(BaseModel):
     host: str = "0.0.0.0"
     port: int = 8000
     cors_origins: list[str] = Field(
-        default_factory=lambda: ["http://localhost:5173", "http://127.0.0.1:5173"]
+        default_factory=lambda: [
+            "http://localhost:5173",
+            "http://127.0.0.1:5173",
+            "http://tauri.localhost",
+            "https://tauri.localhost",
+        ]
     )
 
 
@@ -373,9 +380,10 @@ def load_config(path: str | Path | None = None) -> AppConfig:
     """Load configuration from YAML file."""
     if path is None:
         # Search common locations, starting from source file location for robustness
-        project_root = Path(__file__).resolve().parent.parent.parent.parent
+        project_root = data_root()
         candidates = [
             project_root / "config" / "config.yaml",
+            resource_root() / "config" / "config.yaml",
             Path("config/config.yaml"),
             Path("../config/config.yaml"),
             Path("../../config/config.yaml"),
@@ -401,7 +409,7 @@ def load_config(path: str | Path | None = None) -> AppConfig:
 def save_config(cfg: AppConfig, path: str | Path | None = None) -> Path:
     """Save configuration back to YAML file."""
     if path is None:
-        project_root = Path(__file__).resolve().parent.parent.parent.parent
+        project_root = data_root()
         path = project_root / "config" / "config.yaml"
     path = Path(path)
     path.parent.mkdir(parents=True, exist_ok=True)

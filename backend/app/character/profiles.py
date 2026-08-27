@@ -10,6 +10,7 @@ from typing import Any
 import yaml
 
 from app.core.config import AppConfig, CharacterConfig
+from app.core.paths import data_root
 from app.schemas.character_profile import (
     AppearanceProfile,
     CharacterProfileBase,
@@ -18,7 +19,7 @@ from app.schemas.character_profile import (
     TraitOption,
 )
 
-PROJECT_ROOT = Path(__file__).resolve().parents[3]
+PROJECT_ROOT = data_root()
 DEFAULT_PROFILES_DIR = PROJECT_ROOT / "data" / "character-profiles"
 TRAIT_LIBRARY_FILENAME = "trait-library.md"
 MIGRATION_MARKER = ".migration-v1"

@@ -24,13 +24,14 @@ from urllib.parse import urlencode
 import httpx
 
 from app.core.config import settings
+from app.core.paths import data_root
 
 logger = logging.getLogger(__name__)
 
 AUTH_ENDPOINT = "https://accounts.spotify.com/authorize"
 TOKEN_ENDPOINT = "https://accounts.spotify.com/api/token"
 API_BASE = "https://api.spotify.com/v1"
-TOKEN_FILE = Path(__file__).resolve().parents[3] / "data" / "spotify_tokens.json"
+TOKEN_FILE = data_root() / "data" / "spotify_tokens.json"
 TOKEN_TTL_SECONDS = 600
 # Spotify Development Mode reduced GET /search from 50 to 10 results per
 # request in 2026. Extended-mode apps also accept 10, so this is portable.

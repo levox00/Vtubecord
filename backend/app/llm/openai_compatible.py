@@ -13,6 +13,7 @@ import httpx
 from openai import AsyncOpenAI
 
 from app.core.config import settings
+from app.core.paths import data_root
 from app.llm.base import ChatMessage, LLMProvider, LLMResponse, ToolCall
 from app.llm.tool_adapters import (
     looks_like_tools_unsupported,
@@ -113,7 +114,7 @@ def _is_local_server(base_url: str, provider: str | None = None) -> bool:
 def _resolve_local_model_name(model: str) -> str:
     """Turn the UI's model value into the llama.cpp router model identifier."""
     requested = str(model or "").strip()
-    project_root = Path(__file__).resolve().parents[3]
+    project_root = data_root()
     gguf_dir = project_root / "assets" / "models" / "gguf"
     if requested in {"", "local-model"}:
         candidates = sorted(gguf_dir.glob("*.gguf")) if gguf_dir.exists() else []

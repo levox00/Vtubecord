@@ -29,8 +29,9 @@ import type {
   VoiceBrainSessionStatus,
   VoiceBrainSettings,
 } from "../types";
+import { apiBase } from "./runtime";
 
-const BASE = "/api";
+const BASE = apiBase();
 
 function reportToolCalls(response: ChatResponse): ChatResponse {
   for (const tool of response.tools_used || []) {

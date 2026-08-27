@@ -1,0 +1,15 @@
+{
+  "name": "vtubecord-desktop",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Vtubecord desktop shell",
+  "scripts": {
+    "dev": "tauri dev",
+    "build": "tauri build",
+    "build:frontend": "npm --prefix ../frontend run build",
+    "build:release": "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/build-release.ps1"
+  },
+  "devDependencies": {
+    "@tauri-apps/cli": "^2.0.0"
+  }
+}

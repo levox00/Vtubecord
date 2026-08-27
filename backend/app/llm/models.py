@@ -18,9 +18,11 @@ from typing import Any, Callable
 
 import httpx
 
+from app.core.paths import data_root
+
 logger = logging.getLogger(__name__)
 
-PROJECT_ROOT = Path(__file__).resolve().parents[3]
+PROJECT_ROOT = data_root()
 GGUF_DIR = PROJECT_ROOT / "assets" / "models" / "gguf"
 LICENSE_FILE = PROJECT_ROOT / "data" / "llm-model-license-acceptance.json"
 

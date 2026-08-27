@@ -27,6 +27,7 @@ import {
   Brain,
 } from "lucide-react";
 import { sfxConnect, sfxDisconnect, sfxClick } from "../lib/sounds";
+import { backendWebSocketUrl } from "../lib/runtime";
 
 // --- VAD constants ---
 const VAD_POLL_MS = 50;            // how often to check audio level
@@ -366,9 +367,8 @@ export function LiveMode() {
 
     const connectSocket = () => {
       if (disposed) return;
-      const protocol = window.location.protocol === "https:" ? "wss:" : "ws:";
       const socket = new WebSocket(
-        `${protocol}//${window.location.host}/api/ws/voice-brain/${encodeURIComponent(voiceBrainSessionId)}`,
+        backendWebSocketUrl(`/api/ws/voice-brain/${encodeURIComponent(voiceBrainSessionId)}`),
       );
       brainSocketRef.current = socket;
       socket.onmessage = (event) => {
@@ -430,8 +430,7 @@ export function LiveMode() {
     if (sttConfig?.streaming_enabled === false || sttConfig?.provider === "faster_whisper") return false;
     try {
       await audioContext.audioWorklet.addModule("/audio/pcm-capture-processor.js");
-      const protocol = window.location.protocol === "https:" ? "wss:" : "ws:";
-      const socket = new WebSocket(`${protocol}//${window.location.host}/api/ws/stt-stream`);
+      const socket = new WebSocket(backendWebSocketUrl("/api/ws/stt-stream"));
       socket.binaryType = "arraybuffer";
       sttSocketRef.current = socket;
       streamingReadyRef.current = false;

@@ -41,6 +41,7 @@ from app.character.profiles import (
 )
 from app.character.service import load_character_state
 from app.core.config import save_config, settings
+from app.core.paths import data_root, resource_root
 from app.db.session import get_db
 from app.integrations.spotify import (
     SpotifyError,
@@ -118,7 +119,8 @@ _channel_runtime_active: ContextVar[bool] = ContextVar("channel_runtime_active",
 # Reference recordings are project assets, not pointers to arbitrary files in
 # a user's Downloads folder.  Keeping one canonical directory means a cloned
 # voice remains usable after the original sample is moved or deleted.
-PROJECT_ROOT = Path(__file__).resolve().parents[3]
+PROJECT_ROOT = data_root()
+RESOURCE_ROOT = resource_root()
 VOICE_REFERENCE_DIR = PROJECT_ROOT / "tools" / "zonos" / "reference_voices"
 VOICE_AUDIO_EXTENSIONS = {".wav", ".mp3", ".m4a", ".ogg", ".flac", ".webm"}
 ENV_NAME_PATTERN = re.compile(r"^[A-Za-z_][A-Za-z0-9_]*$")
@@ -127,7 +129,8 @@ ENV_NAME_PATTERN = re.compile(r"^[A-Za-z_][A-Za-z0-9_]*$")
 def _openrouter_env_file() -> Path:
     """Return the project backend .env file used by the Windows launcher."""
 
-    return PROJECT_ROOT / "backend" / ".env"
+    data_env = PROJECT_ROOT / ".env"
+    return data_env if data_env.exists() else RESOURCE_ROOT / "backend" / ".env"
 
 
 def _persist_openrouter_api_key(env_name: str, api_key: str) -> None:
@@ -183,7 +186,7 @@ def _resolve_reference_file(reference: str) -> Path | None:
     if not raw:
         return None
     candidate = Path(raw).expanduser()
-    candidates = [candidate] if candidate.is_absolute() else [PROJECT_ROOT / candidate, Path.cwd() / candidate]
+    candidates = [candidate] if candidate.is_absolute() else [PROJECT_ROOT / candidate, RESOURCE_ROOT / candidate, Path.cwd() / candidate]
     for path in candidates:
         try:
             resolved = path.resolve()
@@ -3873,7 +3876,7 @@ async def get_settings(*, persist_migrations: bool = True) -> SettingsResponse:
 @router.get("/models/gguf")
 async def list_gguf_models() -> list[dict]:
     """List available GGUF model files."""
-    project_root = Path(__file__).resolve().parent.parent.parent.parent
+    project_root = data_root()
     gguf_dir = project_root / "assets" / "models" / "gguf"
     if not gguf_dir.exists():
         return []
@@ -4013,7 +4016,7 @@ async def get_hardware_telemetry(
     llm_lower = llm_name.lower()
 
     # Calculate model size and compute specs
-    project_root = Path(__file__).resolve().parent.parent.parent.parent
+    project_root = data_root()
     # Model names can come from a draft query; only use the filename portion
     # when resolving local telemetry metadata.
     gguf_path = project_root / "assets" / "models" / "gguf" / Path(llm_name).name
@@ -4386,7 +4389,7 @@ async def update_settings(
 import json
 import uuid
 
-_PRESETS_DIR = Path(__file__).resolve().parent.parent.parent.parent / "data" / "presets"
+_PRESETS_DIR = data_root() / "data" / "presets"
 SUPPORTED_PRESET_TYPES = {"master", "user", "llm", "tts", "avatar", "stt"}
 PRESET_TYPE_ALIASES = {"whisper": "stt"}
 

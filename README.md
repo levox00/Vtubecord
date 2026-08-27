@@ -72,6 +72,11 @@ You can switch between local LLMs (llama.cpp, Ollama) and hosted APIs (OpenAI, A
 4. Double-click **`START.bat`**
 5. Open http://localhost:5173
 
+For an installed desktop application, use the Vtubecord target in
+[`desktop/README.md`](desktop/README.md). It builds `Vtubecord.exe` and a
+Windows installer that embeds the UI and starts the backend without terminal
+windows.
+
 ### Linux / macOS
 ```bash
 chmod +x scripts/linux/*.sh
