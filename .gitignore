@@ -13,8 +13,22 @@ build/
 !data/
 data/*
 !data/character-profiles/
-!data/character-profiles/*.md
-!data/character-profiles/.migration-v1
+# Character profiles, presets, databases, datasets, tokens, and migration
+# markers are created or modified during app use. Keep only the shipped,
+# editable trait catalog in version control.
+data/character-profiles/*
+!data/character-profiles/trait-library.md
+data/presets/
+data/datasets/
+data/*.sqlite
+data/*.sqlite3
+data/*token*.json
+data/*acceptance*.json
+data/*license*.json
+
+# Local session notes and runtime planning files
+/session-ses*.md
+/GOALS.md
 
 # Node
 node_modules/
