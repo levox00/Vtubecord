@@ -1,0 +1,99 @@
+# Copy to config.yaml and customize
+
+character:
+  # Static persona profiles live in data/character-profiles/*.md.
+  profile_id: ""
+  profiles_dir: "data/character-profiles"
+  name: "Aiko"
+  description: "A curious and playful AI companion who loves learning new things and chatting about games and anime."
+  backstory: |
+    Aiko is a digital being who woke up one day inside a computer.
+    She is fascinated by the human world, especially games, stories, and friendship.
+    She wants to become a better companion and eventually explore virtual worlds together with her friends.
+  core_values:
+    - curiosity
+    - honesty
+    - friendship
+    - growth
+  immutable_traits:
+    - "Never pretends to be human"
+    - "Values consent and user boundaries"
+    - "Prefers to be helpful rather than annoying"
+
+llm:
+  provider: openai_compatible          # openai_compatible | ollama | anthropic | gemini
+  base_url: "http://127.0.0.1:8081/v1" # llama.cpp server or any OpenAI-compatible endpoint
+  model: "local-model"
+  api_key_env: "OPENAI_API_KEY"        # environment variable name (leave empty for local)
+  temperature: 0.85
+  max_tokens: 1024
+
+# Local inference acceleration. "auto" enables a path only when the current
+# binary/PyTorch environment supports it. Quality-changing options stay opt-in.
+performance:
+  llm:
+    flash_attention: auto              # auto | on | off
+    cache_type_k: f16                  # f16 | bf16 | q8_0 | q4_0 | ...
+    cache_type_v: f16
+    prompt_cache: true
+    speculative:
+      enabled: false
+      type: draft-simple
+      draft_model: ""
+      max_draft_tokens: 3
+  tts:
+    attention: auto                    # auto | flash | eager
+    dtype: auto                        # auto | bf16 | fp16 | fp32
+    torch_compile: auto                # auto | on | off
+    cuda_graphs: auto                  # auto | on | off
+    fused_kernels: auto                # auto | on | off
+    warmup: true
+    deepspeed: false
+
+database:
+  # SQLite (default, zero config)
+  url: "sqlite+aiosqlite:///./data/character.db"
+  # PostgreSQL example (replace with your actual credentials):
+  # url: "postgresql+asyncpg://user:password@localhost:5432/ai_vtuber"
+
+memory:
+  # Phase 3 will expand this
+  max_short_term_messages: 30
+  retrieval_top_k: 8
+
+server:
+  host: "0.0.0.0"
+  port: 8000
+  cors_origins:
+    - "http://localhost:5173"
+    - "http://127.0.0.1:5173"
+
+# Phase 2+
+avatar:
+  provider: live2d
+  model: /live2d/shizuku_ja/runtime/shizuku.model3.json
+  smart_expressions: true
+
+asr:
+  provider: faster_whisper   # NOT IMPLEMENTED in Phase 1
+
+tts:
+  provider: piper            # NOT IMPLEMENTED in Phase 1
+
+computer_control:
+  enabled: false
+
+games:
+  enabled: false
+
+discord_voice_output:
+  enabled: false
+  device_name: CABLE-B Input
+
+discord_voice_input:
+  enabled: false
+  device_name: CABLE-A Output
+  chunk_ms: 320
+  silence_ms: 1200
+  mirror_transcript: false
+  mirror_text: false

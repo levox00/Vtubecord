@@ -1,0 +1,70 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+pytest-cache-files-*/
+tmp*/
+.venv/
+venv/
+dist/
+build/
+*.db
+!data/
+data/*
+!data/character-profiles/
+!data/character-profiles/*.md
+!data/character-profiles/.migration-v1
+
+# Node
+node_modules/
+frontend/dist/
+*.local
+
+# Config with secrets
+config/config.yaml
+
+# IDE
+.idea/
+.vscode/
+*.swp
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Models (never commit multi-GB files)
+assets/models/**
+!assets/models/.gitkeep
+*.gguf
+*.onnx
+
+# Downloaded native inference runtimes and Live2D binary model assets
+tools/index-tts/
+tools/zonos/
+tools/llama.cpp/*.dll
+tools/llama.cpp/*.exe
+tools/llama.cpp/*.lib
+tools/llama.cpp/*.zip
+tools/nemo-speech/bin/
+tools/nemo-speech/lib/
+tools/nemo-speech/*.exe
+assets/live2d/**/*.zip
+assets/live2d/**/*.cmo3
+assets/live2d/**/*.moc3
+assets/live2d/**/*.can3
+assets/live2d/**/*.png
+frontend/public/live2d/**/*.zip
+frontend/public/live2d/**/*.cmo3
+frontend/public/live2d/**/*.moc3
+frontend/public/live2d/**/*.can3
+frontend/public/live2d/**/*.png
+
+# Logs
+logs/
+*.log
+
+# Env
+.env
+.env.*
+!.env.example

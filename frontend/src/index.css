@@ -1,0 +1,196 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: dark;
+  --ui-bg: #1f2023;
+  --ui-surface: #232428;
+  --ui-panel: #2b2d31;
+  --ui-panel-raised: #313338;
+  --ui-input: #1e1f22;
+  --ui-border: #3a3d43;
+  --ui-border-subtle: #2b2d31;
+  --ui-text: #f2f3f5;
+  --ui-text-muted: #b5bac1;
+  --ui-text-subtle: #6d6f78;
+  --ui-accent: #5865f2;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: var(--ui-bg);
+  color: var(--ui-text);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+button,
+input,
+textarea,
+select {
+  font: inherit;
+}
+
+button:focus-visible,
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible {
+  outline: 2px solid color-mix(in srgb, var(--ui-accent) 70%, white);
+  outline-offset: 2px;
+}
+
+::selection {
+  background: #5865f255;
+  color: #fff;
+}
+
+/* Custom scrollbar - Discord style */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: #2b2d31;
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb {
+  background: #1a1b1e;
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #35373c;
+}
+
+/* Discord-style resize handles */
+.resize-handle {
+  position: relative;
+  width: 2px;
+  background: #1f2023;
+  transition: background 0.15s, width 0.15s;
+  cursor: col-resize;
+  flex-shrink: 0;
+  z-index: 10;
+}
+
+.resize-handle::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: -3px;
+  right: -3px;
+}
+
+.resize-handle:hover {
+  background: #5865f2aa;
+  width: 3px;
+}
+
+.resize-handle[data-resize-handle-active="true"],
+.resize-handle[data-separator][data-active] {
+  background: #5865f2cc;
+  width: 3px;
+}
+
+/* Shared surfaces used by the non-settings panels. Keeping these primitives
+   neutral makes semantic colors stand out only when they communicate state. */
+.ui-surface {
+  background: var(--ui-panel-raised);
+  border: 1px solid var(--ui-border-subtle);
+}
+
+.ui-card {
+  background: var(--ui-panel);
+  border: 1px solid var(--ui-border-subtle);
+  border-radius: 0.75rem;
+}
+
+.ui-muted-button {
+  background: var(--ui-input);
+  border: 1px solid var(--ui-border-subtle);
+  color: var(--ui-text-muted);
+  transition: background-color 150ms, border-color 150ms, color 150ms;
+}
+
+.ui-muted-button:hover {
+  background: #35373c;
+  border-color: var(--ui-border);
+  color: var(--ui-text);
+}
+
+.ui-primary-button {
+  background: var(--ui-accent);
+  color: #fff;
+  transition: background-color 150ms, transform 150ms;
+}
+
+.ui-primary-button:hover {
+  background: #4752c4;
+}
+
+.ui-primary-button:active,
+.ui-muted-button:active {
+  transform: translateY(1px);
+}
+
+/* Restrained settings palette. Blue remains the interaction accent while
+   decorative category colors become neutral so hierarchy is easier to scan. */
+.settings-quiet [class*="text-[#eb459e]"],
+.settings-quiet [class*="text-[#57f287]"],
+.settings-quiet [class*="text-[#fee75c]"],
+.settings-quiet [class*="text-[#f47b67]"],
+.settings-quiet [class*="text-[#9b59b6]"],
+.settings-quiet [class*="text-[#00aff4]"],
+.settings-quiet [class*="text-[#23a55a]"],
+.memory-quiet [class*="text-[#fee75c]"],
+.memory-quiet [class*="text-[#57f287]"],
+.memory-quiet [class*="text-[#eb459e]"],
+.memory-quiet [class*="text-[#9b59b6]"],
+.memory-quiet [class*="text-[#00aff4]"],
+.master-presets-quiet [class*="text-[#eb459e]"],
+.master-presets-quiet [class*="text-[#57f287]"],
+.master-presets-quiet [class*="text-[#fee75c]"],
+.master-presets-quiet [class*="text-[#f47b67]"],
+.master-presets-quiet [class*="text-[#9b59b6]"],
+.master-presets-quiet [class*="text-[#00aff4]"] {
+  color: var(--ui-text-muted) !important;
+}
+
+.master-presets-quiet [class*="text-[#23a55a]"],
+.master-presets-quiet [class*="text-[#fee75c]"] {
+  color: var(--ui-text-muted) !important;
+}
+
+.settings-quiet [class*="bg-[#eb459e]"],
+.settings-quiet [class*="bg-[#57f287]"],
+.settings-quiet [class*="bg-[#fee75c]"],
+.settings-quiet [class*="bg-[#f47b67]"],
+.settings-quiet [class*="bg-[#9b59b6]"],
+.settings-quiet [class*="bg-[#00aff4]"],
+.settings-quiet [class*="bg-[#23a55a]"],
+.master-presets-quiet [class*="bg-[#eb459e]"],
+.master-presets-quiet [class*="bg-[#57f287]"],
+.master-presets-quiet [class*="bg-[#fee75c]"],
+.master-presets-quiet [class*="bg-[#f47b67]"],
+.master-presets-quiet [class*="bg-[#9b59b6]"],
+.master-presets-quiet [class*="bg-[#00aff4]"] {
+  background-color: #3f4147 !important;
+}
+
+.master-presets-quiet [class*="bg-[#23a55a]"] {
+  background-color: #3f4147 !important;
+}
+
+.settings-quiet [class*="border-[#eb459e]"],
+.settings-quiet [class*="border-[#57f287]"],
+.settings-quiet [class*="border-[#fee75c]"],
+.settings-quiet [class*="border-[#f47b67]"],
+.settings-quiet [class*="border-[#9b59b6]"],
+.settings-quiet [class*="border-[#00aff4]"] {
+  border-color: #4e5058 !important;
+}
