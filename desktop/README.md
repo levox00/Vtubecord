@@ -46,6 +46,12 @@ For a manual check from a packaged build:
 See [`updater/README.md`](updater/README.md) for configuration and command
 line options.
 
+The release build also creates
+`src-tauri/target/release/bundle/Vtubecord_0.1.0_portable.zip`. This archive
+contains the native app, bundled server, updater, and resource files. It can
+be extracted anywhere and launched with `Vtubecord.exe`; writable data stays
+under `%LOCALAPPDATA%\\Vtubecord`.
+
 The first build downloads the Rust crates, Tauri bundler tools, and the
 WebView2 bootstrapper. The generated installer is x64 and keeps model weights
 out of the application package; users download those through Vtubecord.

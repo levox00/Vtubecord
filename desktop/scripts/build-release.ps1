@@ -106,3 +106,7 @@ try {
 } finally {
     Pop-Location
 }
+
+$portableScript = Join-Path $desktopRoot "scripts\package-portable.ps1"
+& powershell -NoProfile -ExecutionPolicy Bypass -File $portableScript -Version $appVersion
+if ($LASTEXITCODE -ne 0) { throw "Portable package creation failed with exit code $LASTEXITCODE." }
