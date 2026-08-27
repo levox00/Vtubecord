@@ -24,6 +24,9 @@ from urllib.request import Request, urlopen
 
 APP_TITLE = "Vtubecord Updater"
 DEFAULT_TIMEOUT = 30
+# The official release repository. A command-line argument, environment
+# variable, or sidecar config can still override this for development forks.
+DEFAULT_REPOSITORY = "levox00/Vtubecord"
 
 
 class UpdaterError(RuntimeError):
@@ -168,7 +171,10 @@ def launch_installer(path: Path) -> None:
 def run(args: argparse.Namespace) -> int:
     config = load_config()
     repository = normalize_repository(
-        args.repo or os.environ.get("VTUBECORD_GITHUB_REPOSITORY", "") or str(config.get("repository", ""))
+        args.repo
+        or os.environ.get("VTUBECORD_GITHUB_REPOSITORY", "")
+        or str(config.get("repository", ""))
+        or DEFAULT_REPOSITORY
     )
     current = args.current_version or str(config.get("current_version", "0.0.0"))
     release = fetch_json(f"https://api.github.com/repos/{repository}/releases/latest")
