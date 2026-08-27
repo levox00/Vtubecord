@@ -27,7 +27,11 @@ fn backend_candidates(app: &AppHandle) -> Vec<PathBuf> {
     let data = data_dir(app);
     vec![
         resource_dir.join("VtubecordServer.exe"),
+        // Tauri preserves the configured `resources/*` directory in some
+        // Windows bundle targets, while other targets flatten the glob.
+        resource_dir.join("resources").join("VtubecordServer.exe"),
         resource_dir.join("server").join("VtubecordServer.exe"),
+        resource_dir.join("resources").join("server").join("VtubecordServer.exe"),
         data.join("server").join("VtubecordServer.exe"),
     ]
 }
